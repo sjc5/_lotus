@@ -63,6 +63,8 @@ type InstanceOptions[AHD any] struct {
 	GetDefaultHeadBlocks   GetDefaultHeadBlocks
 	RootID                 RootID
 	Kiruna                 *kiruna.Kiruna
+	GeneralMiddlewares     []func(http.Handler) http.Handler
+	ModifyRouter           func(r *chi.Mux)
 }
 
 // Do not create a new instance of this struct directly. Use NewInstance instead,
@@ -128,10 +130,10 @@ func NewKiruna(distFS fs.FS) *kiruna.Kiruna {
 	return kiruna.New(&kiruna.Config{
 		DistFS:           distFS,
 		MainAppEntry:     "cmd/app/main.go",
+		DistDir:          "dist",
 		PrivateStaticDir: "static/private",
 		PublicStaticDir:  "static/public",
 		StylesDir:        "styles",
-		DistDir:          "dist",
 	})
 }
 
@@ -283,16 +285,19 @@ func SetDevMode() error {
 func (fw *Instance[AHD, SE, CEE]) initRouter() *chi.Mux {
 	r := chi.NewRouter()
 
-	r.Use(
+	mw := []func(http.Handler) http.Handler{
 		chimiddleware.RequestID,
 		chimiddleware.Logger,
 		chimiddleware.Recoverer,
 		chimiddleware.Heartbeat("/healthz"),
 		fw.openGraphCrossOriginFixer,
-		// fakeDelayMiddleware,
-		// auth.AuthManager.ToSessionMiddleware(),
-		// auth.AuthManager.ToCSRFMiddleware(),
-	)
+	}
+
+	if fw.GeneralMiddlewares != nil {
+		mw = append(mw, fw.GeneralMiddlewares...)
+	}
+
+	r.Use(mw...)
 
 	r.HandleFunc("/robots.txt", func(w http.ResponseWriter, r *http.Request) {
 		response.New(w).Text(fw.RobotsTxt)
@@ -313,6 +318,10 @@ func (fw *Instance[AHD, SE, CEE]) initRouter() *chi.Mux {
 		r.Use(fw.adHocDataMiddleware)
 		r.Handle("/*", fw.getHwy().GetRootHandler())
 	})
+
+	if fw.ModifyRouter != nil {
+		fw.ModifyRouter(r)
+	}
 
 	return r
 }
@@ -427,7 +436,7 @@ func (fw *Instance[AHD, SE, CEE]) App() {
 
 	grace.Orchestrate(grace.OrchestrateOptions{
 		StartupCallback: func() error {
-			log.Println("Starting server on: http://localhost:", port)
+			log.Printf("Starting server on: http://localhost:%d\n", port)
 
 			if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 				log.Fatalf("Server listen and serve error: %v\n", err)
@@ -436,7 +445,7 @@ func (fw *Instance[AHD, SE, CEE]) App() {
 			return nil
 		},
 		ShutdownCallback: func(shutdownCtx context.Context) error {
-			log.Println("Shutting down server on: http://localhost:", port)
+			log.Printf("Shutting down server on: http://localhost:%d\n", port)
 
 			if err := server.Shutdown(shutdownCtx); err != nil {
 				log.Fatalf("Server shutdown error: %v\n", err)
