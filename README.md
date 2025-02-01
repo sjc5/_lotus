@@ -1,1 +1,1 @@
-Go away, please.
+All rights reserved. Go away, please.
