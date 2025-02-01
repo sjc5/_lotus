@@ -36,8 +36,8 @@ github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/sjc5/hwy v0.16.3 h1:sefhillnr3XTnk3cdVU+4D7lGUqrYUr/Wt+RUQ0VoUc=
 github.com/sjc5/hwy v0.16.3/go.mod h1:QyArs6nItEp6D5z4mT46146+9ArBLJV8a+cgONxidW4=
-github.com/sjc5/kiruna v0.0.62 h1:lWWTFBbUYBGx1HGqSJTPL7iHOk9zZCVrKOXy6ZIHOAY=
-github.com/sjc5/kiruna v0.0.62/go.mod h1:reKaM7fFPeYLns9zgSUeu5vpA739FBnC+qORPUteQRI=
+github.com/sjc5/kiruna v0.0.63 h1:X+cHDJpDH99OctRlIvLnU5Gs3RYB5bR9rZDidVYOiKE=
+github.com/sjc5/kiruna v0.0.63/go.mod h1:reKaM7fFPeYLns9zgSUeu5vpA739FBnC+qORPUteQRI=
 github.com/sjc5/kit v0.0.75 h1:94iyDIV3n2dK3u0656TcmlStjNE6LAHpFHn5FKFvHak=
 github.com/sjc5/kit v0.0.75/go.mod h1:vHOSR8JPk0PP9awAz2H4P+xfFmj9DhIl7O8i1YBXAgE=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
