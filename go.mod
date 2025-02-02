@@ -9,8 +9,8 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/sjc5/hwy v0.16.3
-	github.com/sjc5/kiruna v0.0.63
-	github.com/sjc5/kit v0.0.75
+	github.com/sjc5/kiruna v0.0.64
+	github.com/sjc5/kit v0.0.76
 	golang.org/x/sync v0.10.0
 )
 
